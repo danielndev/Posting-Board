@@ -9,7 +9,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const PORT = 91;
+const PORT = process.argv[2] || 3000;
 
 const app = express();
 
@@ -109,5 +109,5 @@ app.get('/user', (req, res) => {
 
 
 app.listen(PORT, ()=>{
-    console.log("Server is listening..");
+    console.log("Server is listening on port " + PORT);
 });

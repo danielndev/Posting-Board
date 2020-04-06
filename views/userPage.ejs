@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='../public/userPage.css'>
+    <script src='main.js'></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="banner">
+        <div class="buttons">
+            <a href='/main'>
+                <h2>Back</h2>
+            </a>
+            <a href='/signout'>
+                <h2>Sign out</h2>
+            </a>
+        </div>
+        <form action="/search" method="POST">
+            <input required type="text" name="search" placeholder="Search user">
+            <input type="submit">
+        </form>
+    </div>
+    <% if(user != null) {%>
+        <div class="app-container">
+        
+            <div class="sidebar">
+                <div class="user-info">
+                    
+                    <h1> <%= user.username %></h1>
+                </div>
+
+                <div class="f-container">
+                    <h2>Followers</h2>
+                    <p class="count"><%= user.followers.length %></p>
+                    <% for( let i = user.followers.length - 1; i >= 0; i-- ) { %>
+                        <div class="follow">
+                            <a href=<%= '/user?username=' + user.followers[i] %>><%= user.followers[i] %> </a>
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="f-container">
+                    <h2>Following</h2>
+                    <p class="count"><%= user.following.length %></p>
+                    <% for( let i = user.following.length - 1; i >= 0; i-- ) { %>
+                        <div class="follow">
+                            <a href=<%= '/user?username=' + user.following[i] %>> <%= user.following[i] %> </a>
+                        </div>
+                    <% } %>
+                </div>
+
+            </div>
+
+            <div class="posts-container">
+                <h1> <%= user.username %>'s Posts</h1>
+                <% for( let i = posts.length - 1; i >= 0; i-- ) { %>
+                    <div class="post-container">
+                        <h2><%= posts[i].user%> </h2>
+                        <p> <%= posts[i].text%> </p>
+
+                        <% if(following == null){ %>
+                            <form action="/delete_post" method="POST">
+                                <button class="delete-button" type="submit" name="deleteButton" value="<%= posts[i]._id %>" >
+                                    Delete
+                                </button>
+                            </form>
+                        <% } %>
+                        <p style="margin-top: 15px; text-align: right; font-weight: bold;"> <%= posts[i].date%> </p>    
+                    </div>
+                <% } %>
+            </div>
+
+            <div>
+                <% if(following != null){ %>
+                <form action="/follow" method="POST">
+                
+                    <% if(!following){var buttonTxt = "Follow"} else{var buttonTxt = "Unfollow"}%>   
+                    <button class="<%="follow-button "+ buttonTxt %>" type="submit" name="followedUser" value="<%= user.username%>" >
+                    <%=buttonTxt%>
+                    </button>
+                </form>
+                <% } %>
+            </div>
+        <% }else{ %>
+   
+            <div class="no-user">
+                    
+                <h1>There is no user with that name</h1>
+                
+            </div>
+          
+        <% } %>
+    
+</body>
+</html>

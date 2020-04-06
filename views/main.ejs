@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='../public/main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <div class="banner">
+        <div class="buttons">
+            <a href='/signout'>
+                <h2>Sign out</h2>
+            </a>
+            <a href=<%= '/user?username=' + currentUser.username %>>
+                <h2>Profile</h2>
+            </a>
+        </div>
+        <form action="/search" method="POST">
+            <input required type="text" name="search" placeholder="Search user">
+            <input type="submit">
+        </form>
+    </div>
+    <div class="app-container">
+        <div class="sidebar">
+            <h1> <%= currentUser.username %></h1>
+            <form action="/post" method="post">
+                <textarea required rows="10" cols="30" class="write-post" type="text" name="postText" placeholder="Write a post"></textarea>
+                <input class="post-button" type="submit" value="Post">
+            </form>
+            </div>
+
+        <div class="posts-container">
+            <h1>Posts</h1>
+            <% for( let i = posts.length - 1; i >= 0; i-- ) { %>
+                <a href=<%= '/user?username=' + posts[i].user %>>
+                    <div class="post-container">   
+                        <h2><%= posts[i].user%> </h2>    
+                        <p> <%= posts[i].text%> </p>
+                        <% if(posts[i].user === currentUser.username){ %>
+                            <form action="/delete_post" method="POST">
+                                <button class="delete-button" type="submit" name="deleteButton" value="<%= posts[i]._id %>" >
+                                    Delete
+                                </button>
+                            </form>
+                        <% } %>
+                        <p style="margin-top: 15px; text-align: right; font-weight: bold;"> <%= posts[i].date%> </p>    
+                    </div>
+                </a>
+            <% } %>
+        </div>      
+    </div>
+</body>
+</html>
